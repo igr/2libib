@@ -83,6 +83,7 @@ private fun downloadCover(bookdId: Int, url: String): File {
 		if (!response.isSuccessful) throw Exception("Unexpected code $response")
 		val body = response.body!!.bytes()
 		val file = File("cover-$bookdId.jpg")
+		file.deleteOnExit()
 		Files.write(file.toPath(), body)
 		return file
 	}

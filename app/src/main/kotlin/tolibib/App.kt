@@ -18,7 +18,7 @@ fun main() {
 
     loginToLibib(user)
 
-    val book = parseDelfiBookPage(184456)
+    val book = parseDelfiBookPage(39748)
 
     addBookToLibib(book)
 }
