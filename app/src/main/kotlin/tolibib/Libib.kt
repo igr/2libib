@@ -92,5 +92,5 @@ fun addBookToLibib(book: Book) {
 		if (!response.isSuccessful) throw IOException("Unexpected code $response")
 	}
 
-	println("Added book ${book.title} to Libib")
+	println("Added book '${book.title}' to Libib")
 }

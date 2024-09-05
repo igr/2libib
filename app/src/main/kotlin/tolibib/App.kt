@@ -18,9 +18,13 @@ fun main() {
 
     loginToLibib(user)
 
-    val book = parseDelfiBookPage(39748)
+    parseDelfiBookPage(184409).let {
+        addBookToLibib(it)
+    }
+    parseDelfiBookPage(188708).let {
+        addBookToLibib(it)
+    }
 
-    addBookToLibib(book)
 }
 
 
