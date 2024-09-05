@@ -1,0 +1,14 @@
+# https://docs.gradle.org/current/userguide/platforms.html#sub::toml-dependencies-format
+
+[versions]
+junit-jupiter = "5.10.3"
+
+[libraries]
+okhttp = "com.squareup.okhttp3:okhttp:4.12.0"
+dotenv = "io.github.cdimascio:dotenv-kotlin:6.4.2"
+lagarto = "org.jodd:jodd-lagarto:6.0.6"
+jackson="com.fasterxml.jackson.module:jackson-module-kotlin:2.17.+"
+junit-jupiter = { module = "org.junit.jupiter:junit-jupiter", version.ref = "junit-jupiter" }
+
+[plugins]
+kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version = "2.0.0" }
