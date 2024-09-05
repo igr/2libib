@@ -18,11 +18,10 @@ fun main() {
 
     loginToLibib(user)
 
-    parseDelfiBookPage(184409).let {
-        addBookToLibib(it)
-    }
-    parseDelfiBookPage(188708).let {
-        addBookToLibib(it)
+    intArrayOf(46950, 9842, 11576, 63643).forEach {
+        parseDelfiBookPage(it).run {
+            addBookToLibib(this)
+        }
     }
 
 }
