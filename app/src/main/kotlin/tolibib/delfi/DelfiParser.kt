@@ -3,6 +3,7 @@ package tolibib.delfi
 import com.fasterxml.jackson.module.kotlin.jacksonObjectMapper
 import okhttp3.OkHttpClient
 import okhttp3.Request
+import tolibib.cleanHtml
 import tolibib.domain.Book
 import java.io.File
 import java.nio.file.Files
@@ -81,7 +82,7 @@ private fun parseBody(bookId: Int, json: String): Book {
 	)
 }
 
-private fun cleanHtml(html: String): String = html.replace("<.*?>", "")
+
 
 private fun downloadCover(bookdId: Int, url: String): File {
 	val request = Request.Builder()
