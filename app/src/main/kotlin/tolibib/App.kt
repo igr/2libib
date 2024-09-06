@@ -1,15 +1,27 @@
 package tolibib
 
 import io.github.cdimascio.dotenv.Dotenv
+import okhttp3.OkHttpClient
 import tolibib.delfi.parseDelfiBookPage
-import tolibib.domain.User
+import tolibib.goodread.parseGoodreadBookPage
+import java.time.Duration
+import java.time.temporal.ChronoUnit.SECONDS
 
-fun loadUserPass(dotenv: Dotenv): User {
-	val username = dotenv["USERNAME"]
-	val password = dotenv["PASSWORD"]
-	println("Username: $username")
-	return User(username, password)
-}
+// stateless http client
+val httpClient = OkHttpClient.Builder()
+	.followRedirects(true)
+	.followSslRedirects(true)
+	.callTimeout(Duration.of(30, SECONDS))
+	.build()
+
+// 🔥 DELFI.RS ids
+val defi: IntArray = intArrayOf(
+	4050
+)
+
+// 🔥 GOODREADS urls
+val goodreads: Array<String> = arrayOf(
+)
 
 fun main() {
 	val dotenv = Dotenv.load()
@@ -18,12 +30,15 @@ fun main() {
 
 	loginToLibib(user)
 
-	intArrayOf(
-		11794, 37244, 11885, 37245, 37246, 182965, 10729, 10730
-	).forEach {
+	defi.forEach {
 		parseDelfiBookPage(it).run {
 			addBookToLibib(this)
 		}
 	}
 
+	goodreads.forEach {
+		parseGoodreadBookPage(it).run {
+			addBookToLibib(this)
+		}
+	}
 }

@@ -5,13 +5,13 @@ import okhttp3.OkHttpClient
 import okhttp3.Request
 import tolibib.cleanHtml
 import tolibib.domain.Book
-import java.io.File
-import java.nio.file.Files
+import tolibib.downloadCover
+import tolibib.parsePages
 import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
 
 private val httpClient = buildOkHttpClient()
-val mapper = jacksonObjectMapper()
+private val mapper = jacksonObjectMapper()
 
 private fun buildOkHttpClient() = OkHttpClient.Builder()
 	.followRedirects(true)
@@ -52,11 +52,7 @@ private fun parseBody(bookId: Int, json: String): Book {
 		?.let { it as Map<*, *> }
 		?.get("v")
 
-	val pages = when (pagesRaw) {
-		is String -> pagesRaw.toInt()
-		is Int -> pagesRaw
-		else -> 0
-	}
+	val pages = parsePages(pagesRaw)
 
 	val authors = (product["authors"] as List<*>)
 		.map { (it as Map<*, String>)["authorName"] }
@@ -67,7 +63,7 @@ private fun parseBody(bookId: Int, json: String): Book {
 	val coverXl = image["xl"] as String
 	val coverL = image["l"] as String
 	val cover = if (coverXxl != "") coverXxl else if (coverXl != "") coverXl else coverL
-	val coverFile = downloadCover(bookId, cover)
+	val coverFile = downloadCover("https://delfi.rs$cover")
 
 	println("Book $bookId parsed: $title")
 
@@ -80,22 +76,4 @@ private fun parseBody(bookId: Int, json: String): Book {
 		pages = pages,
 		cover = coverFile
 	)
-}
-
-
-
-private fun downloadCover(bookdId: Int, url: String): File {
-	val request = Request.Builder()
-		.url("https://delfi.rs$url")
-		.get()
-		.build()
-
-	httpClient.newCall(request).execute().use { response ->
-		if (!response.isSuccessful) throw Exception("Unexpected code $response")
-		val body = response.body!!.bytes()
-		val file = File("cover-$bookdId.jpg")
-		file.deleteOnExit()
-		Files.write(file.toPath(), body)
-		return file
-	}
 }

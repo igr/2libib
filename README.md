@@ -2,7 +2,8 @@
 
 Import knjiga u **libib.com** iz sledećih izvora, uključujući i sliku naslovne strane:
 
-+ delfi.rs - potreban `ID` knjige iz URL ili iz devtools.
++ **delfi.rs** - potreban `ID` knjige iz URL ili iz devtools.
++ **goodreads.com** - potreban samo URL knjige.
 
 Preporuka: napravite kategoriju "Inbox" u **libib.com** i importujte knjige u njega, kako biste mogli da ih pregledate pre nego što ih premestite u odgovarajuću kategoriju.
 
