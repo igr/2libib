@@ -3,7 +3,9 @@ package tolibib
 import io.github.cdimascio.dotenv.Dotenv
 import okhttp3.OkHttpClient
 import tolibib.delfi.parseDelfiBookPage
+import tolibib.domain.Book
 import tolibib.goodread.parseGoodreadBookPage
+import tolibib.manual.book1
 import java.time.Duration
 import java.time.temporal.ChronoUnit.SECONDS
 
@@ -23,6 +25,12 @@ val defi: IntArray = intArrayOf(
 val goodreads: Array<String> = arrayOf(
 )
 
+// 🔥 Manually created
+val manualBooks: Array<Book> = arrayOf(
+	book1
+)
+
+
 fun main() {
 	val dotenv = Dotenv.load()
 
@@ -40,5 +48,9 @@ fun main() {
 		parseGoodreadBookPage(it).run {
 			addBookToLibib(this)
 		}
+	}
+
+	manualBooks.forEach {
+		addBookToLibib(it)
 	}
 }
