@@ -42,20 +42,30 @@ private fun parseBody(bookId: Int, json: String): Book {
 	// elements
 
 	val title = product["title"] as String
-	val description = product["description"] as String
+	val rawDescription = product["description"] as String
+	val description = cleanHtml(rawDescription)
 	val publisher = product["publisher"] as String
 	val isbn = product["barcode"] as String
 
-	val pages = attributes.find { it is Map<*, *> && it["k"] == "numberOfPages" }
+	val pagesRaw = attributes.find { it is Map<*, *> && it["k"] == "numberOfPages" }
 		?.let { it as Map<*, *> }
-		?.get("v") as? Int ?: 0
+		?.get("v")
+
+	val pages = when (pagesRaw) {
+		is String -> pagesRaw.toInt()
+		is Int -> pagesRaw
+		else -> 0
+	}
 
 	val authors = (product["authors"] as List<*>)
-		.map{(it as Map<*, String>)["authorName"]}
+		.map { (it as Map<*, String>)["authorName"] }
 		.joinToString(", ") { it as String }
 
 	val image = product["images"] as Map<*, *>
-	val cover = image["xxl"] as String
+	val coverXxl = image["xxl"] as String
+	val coverXl = image["xl"] as String
+	val coverL = image["l"] as String
+	val cover = if (coverXxl != "") coverXxl else if (coverXl != "") coverXl else coverL
 	val coverFile = downloadCover(bookId, cover)
 
 	println("Book $bookId parsed: $title")
@@ -63,7 +73,7 @@ private fun parseBody(bookId: Int, json: String): Book {
 	return Book(
 		title = title,
 		authors = authors,
-		description = cleanHtml(description),
+		description = description,
 		publisher = publisher,
 		isbn13 = isbn,
 		pages = pages,
